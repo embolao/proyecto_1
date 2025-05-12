@@ -1,0 +1,7 @@
+httpx
+pytest
+pre-commit
+black
+flake8
+isort
+mypy

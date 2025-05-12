@@ -1,0 +1,16 @@
+README.rst
+pyproject.toml
+setup.cfg
+src/__init__.py
+src/agente/__init__.py
+src/agente/a_memoria_avanzado.py
+src/agente/agente1.py
+src/agente/agente_memoria.py
+src/nombre_proyecto.egg-info/PKG-INFO
+src/nombre_proyecto.egg-info/SOURCES.txt
+src/nombre_proyecto.egg-info/dependency_links.txt
+src/nombre_proyecto.egg-info/top_level.txt
+tests/test_agent1_1.py
+tests/test_agente1.py
+tests/test_agente_memoria.py
+tests/test_basico.py
