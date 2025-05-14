@@ -99,7 +99,9 @@ def test_actuar_respuestas_correctas(agente):
 
 @patch("random.choice")
 def test_actuar_llama_random_choice(mock_random, agente):
-    """Test que verifica que se usa random.choice para seleccionar respuestas"""
+    """
+    Test que verifica que se usa random.choice para seleccionar respuestas
+    """
     agente.estado = "saludar"
     agente.actuar()
     mock_random.assert_called_with(agente.reglas["saludar"])

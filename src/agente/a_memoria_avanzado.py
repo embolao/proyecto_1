@@ -2,6 +2,7 @@ import json
 import os
 import random
 from datetime import datetime
+
 from intent_classifier import IntentClassifier
 
 
@@ -55,19 +56,21 @@ class ProcesadorEntrada:
         self.creado_en = creado_en
         self.memoria = memoria
         self.nombre_usuario = None
-        self.intent_classifier = IntentClassifier(model_path=os.path.join(os.path.dirname(__file__), 'intent_model.h5'))
+        self.intent_classifier = IntentClassifier(
+            model_path=os.path.join(os.path.dirname(__file__), "intent_model.h5")
+        )
         # Mapeo de intenciones a métodos internos
         self.intent_map = {
-            'saludo': self._saludo,
-            'guardar_nombre': self._guardar_nombre_usuario,
-            'nombre_agente': self._mostrar_nombre_agente,
-            'nombre_usuario': self._mostrar_nombre_usuario,
-            'borrar_memoria': self._borrar_memoria,
-            'memoria_completa': self._mostrar_memoria_completa,
-            'mostrar_edad': self._mostrar_edad,
-            'mostrar_hora': self._mostrar_hora,
-            'respuesta_empatica': self._respuesta_empatica,
-            'agradecimiento': self._agradecimiento,
+            "saludo": self._saludo,
+            "guardar_nombre": self._guardar_nombre_usuario,
+            "nombre_agente": self._mostrar_nombre_agente,
+            "nombre_usuario": self._mostrar_nombre_usuario,
+            "borrar_memoria": self._borrar_memoria,
+            "memoria_completa": self._mostrar_memoria_completa,
+            "mostrar_edad": self._mostrar_edad,
+            "mostrar_hora": self._mostrar_hora,
+            "respuesta_empatica": self._respuesta_empatica,
+            "agradecimiento": self._agradecimiento,
         }
 
     def procesar(self, entrada):
@@ -82,8 +85,9 @@ class ProcesadorEntrada:
         # Clasificación de intención
         intent = self.intent_classifier.predict_intent(texto)
         if intent in self.intent_map:
-            # Si la intención requiere el texto original (por ejemplo, guardar nombre), pásalo
-            if intent == 'guardar_nombre':
+            # Si la intención requiere el texto original
+            # (por ejemplo, guardar nombre), pásalo
+            if intent == "guardar_nombre":
                 return self.intent_map[intent](entrada)
             return self.intent_map[intent](None)
 

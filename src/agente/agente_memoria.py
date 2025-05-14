@@ -7,7 +7,8 @@ class AgenteAvanzado:
         """
         Inicializa el agente avanzado.
 
-        El agente avanzado tiene una memoria, un nombre y una fecha de creación.
+        El agente avanzado tiene una memoria, un nombre
+        y una fecha de creación.
         La memoria es una lista de interacciones pasadas, el nombre es
         "AsistentePY" y la fecha de creación es la fecha actual.
         """
@@ -19,7 +20,8 @@ class AgenteAvanzado:
         """
         Guarda la interacción en la memoria del agente.
 
-        La memoria es una lista de diccionarios, donde cada diccionario contiene la fecha y la
+        La memoria es una lista de diccionarios, donde cada diccionario
+        contiene la fecha y la
         interacción en sí.
         """
         self.memoria.append({"fecha": datetime.now(), "interaccion": interaccion})
@@ -28,15 +30,18 @@ class AgenteAvanzado:
         """
         Procesa la entrada del usuario y devuelve una respuesta adecuada.
 
-        Primero, se guarda la entrada en la memoria del agente y se pasa a minúsculas.
+        Primero, se guarda la entrada en la memoria del agente
+        y se pasa a minúsculas.
         Luego, se verifica si la entrada contiene palabras clave:
         - "nombre": se devuelve el nombre del agente.
         - "edad" o "años": se devuelve la edad del agente en años aproximados.
-        - "memoria", "recuerdo", "recuerdas" o "recuerdos": se devuelve el número de
+        - "memoria", "recuerdo", "recuerdas" o "recuerdos":
+        se devuelve el número de
           interacciones que el agente ha guardado en su memoria.
         - "hora": se devuelve la hora actual en formato "HH:MM:SS".
         - "gracias": se devuelve un mensaje de agradecimiento.
-        En caso de que no se encuentre ninguna palabra clave, se devuelve una respuesta
+        En caso de que no se encuentre ninguna palabra clave,
+        se devuelve una respuesta
         aleatoria utilizando el método `generar_respuesta_aleatoria`.
         """
         entrada = entrada.lower()
@@ -63,7 +68,8 @@ class AgenteAvanzado:
         """
         Genera una respuesta aleatoria y devuelve una cadena.
 
-        La lista de respuestas posibles se encuentra en la variable `respuestas`.
+        La lista de respuestas posibles se encuentra en la variable
+        `respuestas`.
         """
         respuestas = [
             "Interesante, ¿puedes contarme mas?",
@@ -89,7 +95,10 @@ def ejecutar_ag_avanzado():
     agente = AgenteAvanzado()
 
     print(
-        "Agente: Hola, soy un agente inteligente.\nPuedes preguntarme cosas o escribir 'salir' para terminar."
+        (
+            "Agente: Hola, soy un agente inteligente.\n"
+            "Puedes preguntarme cosas o escribir 'salir' para terminar."
+        )
     )
     while True:
         entrada_usuario = input("Tú: ")

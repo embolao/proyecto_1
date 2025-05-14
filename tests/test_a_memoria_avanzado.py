@@ -1,6 +1,5 @@
-import os
-import pytest
-from agente.a_memoria_avanzado import Memoria, AgenteConversacional
+from agente.a_memoria_avanzado import AgenteConversacional, Memoria
+
 
 def test_memoria_guardar_y_detalle(tmp_path):
     archivo = tmp_path / "memoria_test.json"

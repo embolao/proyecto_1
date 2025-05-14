@@ -10,8 +10,9 @@ TEST_INPUTS = [
     "gracias",
     "borra la memoria",
     "cuántos años tienes",
-    "salir"
+    "salir",
 ]
+
 
 def test_agent():
     proc = subprocess.Popen(
@@ -19,7 +20,7 @@ def test_agent():
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        text=True
+        text=True,
     )
     input_text = "\n".join(TEST_INPUTS) + "\n"
     out, err = proc.communicate(input=input_text, timeout=60)
@@ -29,6 +30,7 @@ def test_agent():
     print(err)
     assert "Agente: Hola, soy AsistentePY" in out
     assert "Hasta pronto" in out
+
 
 if __name__ == "__main__":
     test_agent()
