@@ -3,7 +3,8 @@ import os
 import random
 from datetime import datetime
 
-from intent_classifier import IntentClassifier
+from src.agente.dataset_mysql import DatasetMySQL
+from src.agente.intent_classifier import IntentClassifier
 
 
 class Memoria:
@@ -59,51 +60,23 @@ class ProcesadorEntrada:
         self.intent_classifier = IntentClassifier(
             model_path=os.path.join(os.path.dirname(__file__), "intent_model.h5")
         )
-        # Mapeo de intenciones a métodos internos
-        self.intent_map = {
-            "saludo": self._saludo,
-            "guardar_nombre": self._guardar_nombre_usuario,
-            "nombre_agente": self._mostrar_nombre_agente,
-            "nombre_usuario": self._mostrar_nombre_usuario,
-            "borrar_memoria": self._borrar_memoria,
-            "memoria_completa": self._mostrar_memoria_completa,
-            "mostrar_edad": self._mostrar_edad,
-            "mostrar_hora": self._mostrar_hora,
-            "respuesta_empatica": self._respuesta_empatica,
-            "agradecimiento": self._agradecimiento,
-        }
+        self.dataset = DatasetMySQL(
+            host="localhost", user="usuario", password="usuario_pass", database="tu_db"
+        )
 
     def procesar(self, entrada):
         texto = entrada.lower()
         if "borrar recuerdos" in texto or "borrar memoria" in texto:
             # No registrar interacción después de borrar la memoria.
-            return self._borrar_memoria(entrada)
+            return "Memoria borrada."
 
         # Guardar interacción antes de procesar los comandos.
         self.memoria.guardar(f"Usuario dijo: {texto}")
 
         # Clasificación de intención
         intent = self.intent_classifier.predict_intent(texto)
-        if intent in self.intent_map:
-            # Si la intención requiere el texto original
-            # (por ejemplo, guardar nombre), pásalo
-            if intent == "guardar_nombre":
-                return self.intent_map[intent](entrada)
-            return self.intent_map[intent](None)
-
-        # Métodos adicionales por palabras clave (fallback)
-        comandos = [
-            (["edad", "años"], self._mostrar_edad),
-            (["memoria", "recuerdos", "los recuerdos"], self._mostrar_memoria_completa),
-            (["hora"], self._mostrar_hora),
-            (["gracias"], lambda _: "De nada, estoy aquí para ayudarte."),
-            (["triste", "deprimido", "mal"], self._respuesta_empatica),
-        ]
-        for claves, funcion in comandos:
-            if any(palabra in texto for palabra in claves):
-                return funcion(entrada)
-
-        return self._respuesta_generica()
+        respuesta = self.dataset.obtener_respuesta(intent)
+        return respuesta if respuesta else "No tengo una respuesta para esa intención."
 
     # Métodos internos
 

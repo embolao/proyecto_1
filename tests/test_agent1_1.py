@@ -1,4 +1,5 @@
-from agente.agente1 import AgenteSimple  # Ajusta la ruta según tu estructura
+from src.agente.agente1 import \
+    AgenteSimple  # Ajusta la ruta según tu estructura
 
 
 def test_saludo():

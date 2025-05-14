@@ -1,4 +1,4 @@
-from agente import hola
+from src.agente import hola
 
 
 def test_hola():

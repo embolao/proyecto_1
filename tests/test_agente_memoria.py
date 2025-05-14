@@ -1,6 +1,6 @@
 import pytest
 
-from agente.agente_memoria import AgenteAvanzado
+from src.agente.agente_memoria import AgenteAvanzado
 
 
 @pytest.fixture

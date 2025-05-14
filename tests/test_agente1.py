@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from agente.agente1 import \
+from src.agente.agente1 import \
     AgenteSimple  # Reemplaza 'tu_archivo' con el nombre real de tu archivo
 
 

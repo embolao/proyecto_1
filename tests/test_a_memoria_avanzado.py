@@ -1,4 +1,4 @@
-from agente.a_memoria_avanzado import AgenteConversacional, Memoria
+from src.agente.a_memoria_avanzado import AgenteConversacional, Memoria
 
 
 def test_memoria_guardar_y_detalle(tmp_path):

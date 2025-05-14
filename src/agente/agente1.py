@@ -1,19 +1,34 @@
 import random
 
+from src.agente.dataset_mysql import DatasetMySQL
+
 
 class AgenteSimple:
     def __init__(self):
-        self.reglas = {
-            "saludar": ["Hola", "Buenos días", "¿Cómo estás?"],
-            "despedir": ["Adiós", "Hasta luego", "Nos vemos"],
-            "responder_pregunta": [
-                "No lo sé",
-                "Podría investigarlo",
-                "Esa es una buena pregunta",
-            ],
-            "indefinido": ["No entiendo lo que me dices"],
+        # Mapeo de etiquetas de la base de datos a los estados esperados por los tests
+        etiqueta_a_estado = {
+            "saludo": "saludar",
+            "despedir": "despedir",
+            "responder_pregunta": "responder_pregunta",
+            "indefinido": "indefinido",
         }
+        self.reglas = {
+            "saludar": [],
+            "despedir": [],
+            "responder_pregunta": [],
+            "indefinido": [],
+        }
+        db = DatasetMySQL(
+            host="localhost", user="usuario", password="usuario_pass", database="tu_db"
+        )
+        frases, etiquetas = db.obtener_dataset()
+        for frase, etiqueta in zip(frases, etiquetas):
+            estado = etiqueta_a_estado.get(etiqueta)
+            if estado:
+                self.reglas[estado].append(frase)
+        db.close()
         self.estado = "inicio"
+        print("[DEBUG] self.reglas:", self.reglas)
 
     def percibir(self, entrada):
         entrada = entrada.lower()

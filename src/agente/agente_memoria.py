@@ -1,20 +1,20 @@
 import random
 from datetime import datetime
 
+from src.agente.dataset_mysql import DatasetMySQL
+
 
 class AgenteAvanzado:
     def __init__(self):
         """
         Inicializa el agente avanzado.
-
-        El agente avanzado tiene una memoria, un nombre
-        y una fecha de creación.
-        La memoria es una lista de interacciones pasadas, el nombre es
-        "AsistentePY" y la fecha de creación es la fecha actual.
         """
         self.memoria = []
         self.nombre = "AsistentePY"
         self.creado_en = datetime.now()
+        self.dataset = DatasetMySQL(
+            host="localhost", user="usuario", password="usuario_pass", database="tu_db"
+        )
 
     def guardar_en_memoria(self, interaccion):
         """
@@ -28,41 +28,28 @@ class AgenteAvanzado:
 
     def percibir(self, entrada):
         """
-        Procesa la entrada del usuario y devuelve una respuesta adecuada.
-
-        Primero, se guarda la entrada en la memoria del agente
-        y se pasa a minúsculas.
-        Luego, se verifica si la entrada contiene palabras clave:
-        - "nombre": se devuelve el nombre del agente.
-        - "edad" o "años": se devuelve la edad del agente en años aproximados.
-        - "memoria", "recuerdo", "recuerdas" o "recuerdos":
-        se devuelve el número de
-          interacciones que el agente ha guardado en su memoria.
-        - "hora": se devuelve la hora actual en formato "HH:MM:SS".
-        - "gracias": se devuelve un mensaje de agradecimiento.
-        En caso de que no se encuentre ninguna palabra clave,
-        se devuelve una respuesta
-        aleatoria utilizando el método `generar_respuesta_aleatoria`.
+        Procesa la entrada del usuario y devuelve una respuesta adecuada desde MySQL.
         """
+        self.guardar_en_memoria(entrada)
         entrada = entrada.lower()
-        self.guardar_en_memoria(f"Usuario dijo: {entrada}")
-
+        # Palabras clave a etiqueta
         if "nombre" in entrada:
-            return f"Mi nombre es {self.nombre}"
+            etiqueta = "nombre_agente"
         elif "edad" in entrada or "años" in entrada:
-            edad = (datetime.now() - self.creado_en).days / 365
-            return f"Tengo aproximadamente {edad:.1f} años"
+            etiqueta = "mostrar_edad"
         elif any(
             palabra in entrada
             for palabra in ["memoria", "recuerdo", "recuerdas", "recuerdos"]
         ):
-            return f"Recuerdo {len(self.memoria)} interacciones"
+            etiqueta = "memoria_completa"
         elif "hora" in entrada:
-            return f"Son las {datetime.now().strftime('%H:%M:%S')}"
+            etiqueta = "mostrar_hora"
         elif "gracias" in entrada:
-            return "De nada, estoy aquí para ayudar"
+            etiqueta = "agradecimiento"
         else:
-            return self.generar_respuesta_aleatoria()
+            etiqueta = "indefinido"
+        respuesta = self.dataset.obtener_respuesta(etiqueta)
+        return respuesta if respuesta else "No tengo una respuesta para esa intención."
 
     def generar_respuesta_aleatoria(self):
         """

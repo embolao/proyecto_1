@@ -10,6 +10,8 @@ from tensorflow.keras.layers import BatchNormalization, Dense, Dropout
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.utils import to_categorical
 
+from .dataset_mysql import DatasetMySQL
+
 
 class IntentClassifier:
     def __init__(self, model_path="intent_model.h5", embed_path="intent_embeds.pkl"):
@@ -25,6 +27,10 @@ class IntentClassifier:
         self._init_or_load()
 
     def _init_or_load(self):
+        # Configura aquí tus datos de conexión
+        self.dataset = DatasetMySQL(
+            host="localhost", user="root", password="tu_pass", database="tu_db"
+        )
         if (
             os.path.exists(self.model_path)
             and os.path.exists(self.embed_path)
@@ -32,7 +38,7 @@ class IntentClassifier:
         ):
             self._load()
         else:
-            frases, etiquetas = self._generate_large_dataset()
+            frases, etiquetas = self.dataset.obtener_dataset()
             self.train(frases, etiquetas)
 
     def _generate_large_dataset(self):
