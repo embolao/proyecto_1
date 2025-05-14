@@ -1,10 +1,14 @@
 import json
 import os
 import random
+import sys
 from datetime import datetime
 
-from src.agente.dataset_mysql import DatasetMySQL
-from src.agente.intent_classifier import IntentClassifier
+from agente.dataset_mysql import DatasetMySQL
+from agente.intent_classifier import IntentClassifier
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 
 class Memoria:
@@ -35,6 +39,13 @@ class Memoria:
         """Este método borra todos los recuerdos."""
         self._interacciones = []
         self._guardar_en_archivo()
+        # Eliminar el archivo físico si existe
+        if os.path.exists(self._archivo):
+            try:
+                os.remove(self._archivo)
+            except Exception:
+                pass
+        self._interacciones = []  # Asegura que la memoria en RAM también quede vacía
         return "Todos los recuerdos han sido borrados."
 
     def _guardar_en_archivo(self):

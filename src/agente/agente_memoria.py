@@ -1,7 +1,7 @@
 import random
 from datetime import datetime
 
-from src.agente.dataset_mysql import DatasetMySQL
+from agente.dataset_mysql import DatasetMySQL
 
 
 class AgenteAvanzado:
