@@ -126,4 +126,4 @@ Desarrollado por [Tu Nombre].
 
 ---
 
-Desarrollado por [Tu Nombre].
+Desarrollado por [Embolao].
