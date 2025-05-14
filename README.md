@@ -91,4 +91,4 @@ Este proyecto implementa un agente conversacional en Python capaz de clasificar 
 
 ---
 
-Desarrollado por [Embolao].
+Desarrollado por Embolao.
