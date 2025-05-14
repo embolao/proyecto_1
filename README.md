@@ -52,41 +52,6 @@ Este proyecto implementa un agente conversacional en Python capaz de clasificar 
 - El modelo se reentrena automáticamente si modificas el dataset o borras los archivos del modelo.
 - Puedes ver la intención y probabilidad predicha en consola para depuración.
 
----
-
-Desarrollado por [Tu Nombre].
-│   ├── __pycache__/
-│   ├── agente/
-│   │   ├── __init__.py
-    src/
-        agente/
-            __pycache__/
-            a_memoria_avanzado.py
-                # Lógica principal del agente
-            agente1.py
-            agente_memoria.py
-            intent_classifier.py
-                # Clasificador de intenciones
-            intent_model.h5
-                # Modelo entrenado (Keras)
-            intent_model.h5.encoder.pkl
-                # Encoder de clases (pickle)
-            intent_model.h5.tokenizer.pkl
-                # (legacy, no se usa con spaCy)
-        nombre_proyecto.egg-info/
-    tests/
-        __pycache__/
-        test_a_memoria_avanzado.py
-        test_agent1_1.py
-        test_agente1.py
-        test_agente_memoria.py
-        test_basico.py
-        test_intent_agent.py
-            # Test principal del agente
-    tox.ini
-    ver_modelo.py
-        # Script para visualizar modelo y encoder
-
 6. **Respuestas**: El agente responde según la intención detectada.
 
 ## Requisitos
