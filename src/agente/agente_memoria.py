@@ -1,11 +1,12 @@
 import random
 from datetime import datetime
 
+
 class AgenteAvanzado:
     def __init__(self):
         """
         Inicializa el agente avanzado.
-        
+
         El agente avanzado tiene una memoria, un nombre y una fecha de creación.
         La memoria es una lista de interacciones pasadas, el nombre es
         "AsistentePY" y la fecha de creación es la fecha actual.
@@ -17,14 +18,11 @@ class AgenteAvanzado:
     def guardar_en_memoria(self, interaccion):
         """
         Guarda la interacción en la memoria del agente.
-        
+
         La memoria es una lista de diccionarios, donde cada diccionario contiene la fecha y la
         interacción en sí.
         """
-        self.memoria.append({
-            "fecha":datetime.now(),
-            "interaccion":interaccion
-        })
+        self.memoria.append({"fecha": datetime.now(), "interaccion": interaccion})
 
     def percibir(self, entrada):
         """
@@ -49,7 +47,10 @@ class AgenteAvanzado:
         elif "edad" in entrada or "años" in entrada:
             edad = (datetime.now() - self.creado_en).days / 365
             return f"Tengo aproximadamente {edad:.1f} años"
-        elif any(palabra in entrada for palabra in ["memoria", "recuerdo", "recuerdas", "recuerdos"]):
+        elif any(
+            palabra in entrada
+            for palabra in ["memoria", "recuerdo", "recuerdas", "recuerdos"]
+        ):
             return f"Recuerdo {len(self.memoria)} interacciones"
         elif "hora" in entrada:
             return f"Son las {datetime.now().strftime('%H:%M:%S')}"
@@ -58,11 +59,10 @@ class AgenteAvanzado:
         else:
             return self.generar_respuesta_aleatoria()
 
-        
     def generar_respuesta_aleatoria(self):
         """
         Genera una respuesta aleatoria y devuelve una cadena.
-        
+
         La lista de respuestas posibles se encuentra en la variable `respuestas`.
         """
         respuestas = [
@@ -70,15 +70,16 @@ class AgenteAvanzado:
             "No estoy seguro de entender completamente",
             "Eso es algo sobre lo que podiamos investigar",
             "¿Qué piensas tú al respecto?",
-            "Podrìa ayudarte mejor si me das más detalles"
+            "Podrìa ayudarte mejor si me das más detalles",
         ]
         return random.choice(respuestas)
+
 
 # Ejemplo de uso
 def ejecutar_ag_avanzado():
     """
     Ejecuta un agente avanzado en modo interactivo.
-    
+
     Primero se muestra un mensaje de bienvenida y luego se entra en un bucle
     infinito donde se pide al usuario que ingrese una entrada.
     Si la entrada es "salir", se sale del bucle y se termina el programa.
@@ -87,13 +88,16 @@ def ejecutar_ag_avanzado():
     """
     agente = AgenteAvanzado()
 
-    print("Agente: Hola, soy un agente inteligente.\nPuedes preguntarme cosas o escribir 'salir' para terminar.")
+    print(
+        "Agente: Hola, soy un agente inteligente.\nPuedes preguntarme cosas o escribir 'salir' para terminar."
+    )
     while True:
         entrada_usuario = input("Tú: ")
         if entrada_usuario.lower() == "salir":
             break
         respuesta = agente.percibir(entrada_usuario)
         print(f"Agente: {respuesta}")
+
 
 if __name__ == "__main__":
     ejecutar_ag_avanzado()

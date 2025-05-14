@@ -2,6 +2,8 @@ import json
 import os
 import random
 from datetime import datetime
+from intent_classifier import IntentClassifier
+
 
 class Memoria:
     def __init__(self, archivo="memoria.json"):
@@ -11,10 +13,9 @@ class Memoria:
     def guardar(self, texto):
         """Solo guarda la interacción si no está vacía."""
         if texto:
-            self._interacciones.append({
-                "fecha": datetime.now().isoformat(),
-                "texto": texto
-            })
+            self._interacciones.append(
+                {"fecha": datetime.now().isoformat(), "texto": texto}
+            )
             self._guardar_en_archivo()
 
     def cantidad(self):
@@ -26,9 +27,7 @@ class Memoria:
     def detalle(self):
         if not self._interacciones:
             return "Aún no tengo recuerdos."
-        return "\n".join(
-            f"{i['fecha']} - {i['texto']}" for i in self._interacciones
-        )
+        return "\n".join(f"{i['fecha']} - {i['texto']}" for i in self._interacciones)
 
     def borrar(self):
         """Este método borra todos los recuerdos."""
@@ -56,6 +55,20 @@ class ProcesadorEntrada:
         self.creado_en = creado_en
         self.memoria = memoria
         self.nombre_usuario = None
+        self.intent_classifier = IntentClassifier(model_path=os.path.join(os.path.dirname(__file__), 'intent_model.h5'))
+        # Mapeo de intenciones a métodos internos
+        self.intent_map = {
+            'saludo': self._saludo,
+            'guardar_nombre': self._guardar_nombre_usuario,
+            'nombre_agente': self._mostrar_nombre_agente,
+            'nombre_usuario': self._mostrar_nombre_usuario,
+            'borrar_memoria': self._borrar_memoria,
+            'memoria_completa': self._mostrar_memoria_completa,
+            'mostrar_edad': self._mostrar_edad,
+            'mostrar_hora': self._mostrar_hora,
+            'respuesta_empatica': self._respuesta_empatica,
+            'agradecimiento': self._agradecimiento,
+        }
 
     def procesar(self, entrada):
         texto = entrada.lower()
@@ -66,20 +79,22 @@ class ProcesadorEntrada:
         # Guardar interacción antes de procesar los comandos.
         self.memoria.guardar(f"Usuario dijo: {texto}")
 
+        # Clasificación de intención
+        intent = self.intent_classifier.predict_intent(texto)
+        if intent in self.intent_map:
+            # Si la intención requiere el texto original (por ejemplo, guardar nombre), pásalo
+            if intent == 'guardar_nombre':
+                return self.intent_map[intent](entrada)
+            return self.intent_map[intent](None)
+
+        # Métodos adicionales por palabras clave (fallback)
         comandos = [
-            (["me llamo"], self._guardar_nombre_usuario),
-            (["hola"], self._saludo),
-            (["nombre"], self._mostrar_nombre_agente),
-            (["quién soy", "cómo me llamo"], self._mostrar_nombre_usuario),
             (["edad", "años"], self._mostrar_edad),
-            (["memoria completa"], self._mostrar_memoria_completa),
             (["memoria", "recuerdos", "los recuerdos"], self._mostrar_memoria_completa),
-            (["borrar recuerdos", "borrar memoria"], self._borrar_memoria),
             (["hora"], self._mostrar_hora),
             (["gracias"], lambda _: "De nada, estoy aquí para ayudarte."),
             (["triste", "deprimido", "mal"], self._respuesta_empatica),
         ]
-
         for claves, funcion in comandos:
             if any(palabra in texto for palabra in claves):
                 return funcion(entrada)
@@ -106,7 +121,11 @@ class ProcesadorEntrada:
         return f"Mi nombre es {self.nombre_agente}."
 
     def _mostrar_nombre_usuario(self, _):
-        return f"Te llamas {self.nombre_usuario}." if self.nombre_usuario else "No me has dicho tu nombre aún."
+        return (
+            f"Te llamas {self.nombre_usuario}."
+            if self.nombre_usuario
+            else "No me has dicho tu nombre aún."
+        )
 
     def _mostrar_edad(self, _):
         edad = (datetime.now() - self.creado_en).days / 365
@@ -128,13 +147,16 @@ class ProcesadorEntrada:
     def _respuesta_empatica(self, _):
         return "Siento que te sientas así. Estoy aquí para apoyarte."
 
+    def _agradecimiento(self, _):
+        return "¡Gracias a ti! Si necesitas algo más, aquí estoy."
+
     def _respuesta_generica(self):
         respuestas = [
             "Interesante... ¿puedes contarme más?",
             "Hmm, no estoy seguro de entender del todo.",
             "Eso suena intrigante. Podríamos investigar.",
             "¿Tú qué opinas?",
-            "Podría ayudarte mejor con más detalles."
+            "Podría ayudarte mejor con más detalles.",
         ]
         return random.choice(respuestas)
 
@@ -143,9 +165,7 @@ class AgenteConversacional:
     def __init__(self):
         self.memoria = Memoria()
         self.procesador = ProcesadorEntrada(
-            nombre_agente="AsistentePY",
-            creado_en=datetime.now(),
-            memoria=self.memoria
+            nombre_agente="AsistentePY", creado_en=datetime.now(), memoria=self.memoria
         )
 
     def interactuar(self, entrada):
