@@ -1,3 +1,59 @@
-*.pyc
+# Byte-compiled / optimized / DLL files
 __pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environments
 .venv/
+venv/
+ENV/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Pytest
+.pytest_cache/
+
+# Tox
+.tox/
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Egg info
+*.egg-info/
+.eggs/
+
+# Model/data files
+*.h5
+*.pkl
+*.joblib
+*.json
+intent_embeds.pkl
+intent_model.h5*
+memoria.json
+
+# IDEs
+.vscode/
+.idea/
+
+# Docs build
+_build/
+docs/_build/
+
+# OS files
+.DS_Store
+Thumbs.db
