@@ -42,6 +42,18 @@ dist/
 *.pkl
 *.joblib
 *.json
+!setup.py
+!requirements.txt
+!pytest.ini
+!tox.ini
+!pyproject.toml
+!setup.cfg
+!Jenkinsfile
+!Dockerfile
+!docker-compose.yml
+!mysql-init.sql
+
+# Model files
 intent_embeds.pkl
 intent_model.h5*
 memoria.json
